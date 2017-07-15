@@ -8,18 +8,28 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
+enum ProfileType: String {
+    case guest = "Guest"
+    case host = "Host"
 }
 
+class ViewController: UIViewController {
+    
+    var currentProfile = ProfileType.guest
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configureFor(profileType: currentProfile)
+    }
+    
+    @IBAction func didPressSwitchProfile(_ sender: Any) {
+        currentProfile = currentProfile == .guest ? .host : .guest
+        configureFor(profileType: currentProfile)
+    }
+    
+    func configureFor(profileType: ProfileType) {
+        title = profileType.rawValue
+        ShortcutParser.shared.registerShortcuts(for: profileType)
+    }
+}
